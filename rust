@@ -1,0 +1,85 @@
+#[derive(Debug)]
+struct Book {
+    id: u32,
+    title: String,
+    author: String,
+    is_available: Option<bool>,
+    book_type: Genre,
+}
+
+#[derive(Debug)]
+enum Genre {
+    Fiction,
+    NonFiction,
+    ScienceFiction,
+    Mystery,
+}
+
+#[derive(Debug)]
+struct Library {
+    books: Vec<Book>,
+}
+
+impl Library {
+    fn new() -> Library {
+        Library { books: Vec::new() }
+    }
+
+    fn add_book(
+        &mut self,
+        book_id: u32,
+        book_title: String,
+        book_author: String,
+        book_is_available: Option<bool>,
+        book_type_new: Genre,
+    ) {
+        let new_book = Book {
+            id: book_id,
+            title: book_title,
+            author: book_author,
+            is_available: book_is_available,
+            book_type: book_type_new,
+        };
+
+        self.books.push(new_book);
+    }
+
+    fn search_book(&self, book_name: &str) -> Option<&Book> {
+        for book in &self.books {
+            if book_name == &book.title {
+                return Some(book);
+            }
+        }
+        None
+    }
+}
+
+fn main() {
+    let mut new_library = Library::new();
+    new_library.add_book(
+        1,
+        "Merchant of Venice".to_string(),
+        "Shakespeare".to_string(),
+        Some(true),
+        Genre::Mystery,
+    );
+    new_library.add_book(
+        1,
+        "Sherlock Holmes".to_string(),
+        "Arthur Conan Doyle".to_string(),
+        Some(true),
+        Genre::Fiction,
+    );
+    new_library.add_book(
+        1,
+        "The Harry Potter".to_string(),
+        "J.K Rowling".to_string(),
+        None,
+        Genre::Mystery,
+    );
+
+    println!("{:?}", new_library);
+
+    let search_book = new_library.search_book("The Harry Potter");
+    println!("{:?}", search_book);
+}
